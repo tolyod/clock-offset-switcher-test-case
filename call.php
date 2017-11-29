@@ -1,18 +1,4 @@
 <?php
-/*
-function clockOffsetHourPlus() {
-        loadJSON( function (err, resp) {
-          if(!err) {
-            console.log(resp);
-                localStorage.setItem('offset', getCurrentOffset()+1);
-          }
-        },"/call.php?action=HourPlus");
-
-
-}
-*/
-
-            
 function getTempFileName () {
   return sys_get_temp_dir()."/time_offset.txt";
 }
