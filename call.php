@@ -34,24 +34,24 @@ if(array_keys($methods, $action, true)) {
   switch($action) {
     case "HourPlus":
       $funcResp = HourPlus();
-      header('Content-Type: application/json;charset=utf-8');
-      echo json_encode(["status"=>"ok", 
+      $respBody = json_encode(["status"=>"ok", 
                         "offset"=>getCurrentOffset(),
                         "HourPlus"=>$funcResp]);
     break;
     case "HourMinus":
       $funcResp = HourMinus();
-      header('Content-Type: application/json;charset=utf-8');
-      echo json_encode(["status"=>"ok", 
+      $respBody = json_encode(["status"=>"ok", 
                         "offset"=>getCurrentOffset(),
                         "HourMinus"=> $funcResp]);
     break;
     case "CurrentOffset":
-      header('Content-Type: application/json;charset=utf-8');
-      echo json_encode(["status"=>"ok", 
+
+      $respBody = json_encode(["status"=>"ok", 
                         "offset"=>getCurrentOffset()]);
     break;
   }
+  header('Content-Type: application/json;charset=utf-8');
+  echo $respBody;
 }
 
 ?>
