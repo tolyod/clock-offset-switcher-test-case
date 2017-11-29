@@ -81,13 +81,15 @@ function calcTime() {
     return nd.toLocaleTimeString();
 } 
 
+function updateOffest(offset) {
+  localStorage.setItem('offset', offset);
+}
+
 function getCurrentOffset() {
 	loadJSON( function (err, resp) {
 	  if(!err) {
 	    var respObj = JSON.parse(resp);
-	    var curOffset = parseInt(respObj.offset);
-
-	    localStorage.setItem('offset', curOffset);
+	    updateOffest( parseInt(respObj.offset) );
 	  }
 	},"call.php?action=CurrentOffset");
 	
@@ -98,9 +100,7 @@ function clockOffsetHourPlus() {
 	loadJSON( function (err, resp) {
 	  if(!err) {
 	    var respObj = JSON.parse(resp);
-	    var curOffset = parseInt(respObj.offset);
-	    
-	    localStorage.setItem('offset', curOffset);
+	    updateOffest( parseInt(respObj.offset) );
 	  }
 	},"call.php?action=HourPlus");
 
@@ -111,9 +111,7 @@ function clockOffsetHourMinus() {
 	loadJSON( function (err, resp) {
 	  if(!err) {
 	    var respObj = JSON.parse(resp);
-	    var curOffset = parseInt(respObj.offset);
-
-	    localStorage.setItem('offset', curOffset);
+	    updateOffest( parseInt(respObj.offset) );
 	  }
 	},"call.php?action=HourMinus");
 	
