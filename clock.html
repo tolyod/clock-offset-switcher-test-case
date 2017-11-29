@@ -1,0 +1,124 @@
+<html>
+<head>
+<style type="text/css">
+#timediv {
+    background: #fff;
+    text-align: center;
+    width: 148px;
+    color: #000;
+    border: 1px #ccc groove;
+    position: relative;
+}
+.floating-box {
+    float: left;
+    height: 20px;
+    margin: 4px;
+    border: 0px;  
+}
+</style>
+
+</head>
+<body onload style>
+  <div>
+    <div class="floating-box" id="timediv">5:38:23 PM</div>
+    <div class="floating-box"><button type="button" onclick="clockOffsetHourPlus();">Hour +</button></div>
+    <div class="floating-box"><button type="button" onclick="clockOffsetHourMinus();">Hour -</button></div>
+  </div>
+<script type="text/javascript">
+
+function loadJSON(callback,url) {
+
+	var xobj = new XMLHttpRequest();
+	//var j=0;
+	xobj.overrideMimeType("application/json");
+	xobj.open('GET', url, true);
+	
+	xobj.onreadystatechange = function () {
+		if (xobj.readyState == 4 && xobj.status == "200") {
+			// Required use of an anonymous
+			// callback as .open will NOT
+			// return a value but simply
+			// returns undefined in
+			// asynchronous mode
+			callback(null, xobj.responseText);
+		} else {
+			//console.log(url + ' loading');
+			//j++;
+		}
+	};
+	
+	xobj.onerror = function (e) {
+		callback(e, null);
+		console.log('loading error', e);
+	};
+	
+	xobj.send(null);  
+}
+	
+var interval = setInterval(timestamphome, 1000);
+
+function timestamphome(){
+	 var time = document.getElementById('timediv'); 
+	 time.innerHTML = calcTime();;
+}
+
+function calcTime() {
+
+    var offset = getCurrentOffset();
+    // create Date object for current location
+    var d = new Date();
+
+    // convert to msec
+    // add local time zone offset
+    // get UTC time in msec
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+
+    // create new Date object for different city
+    // using supplied offset
+    var nd = new Date(utc + (3600000*offset));
+
+    // return time as a string
+    return nd.toLocaleTimeString();
+} 
+
+function getCurrentOffset() {
+	loadJSON( function (err, resp) {
+	  if(!err) {
+	    var respObj = JSON.parse(resp);
+	    var curOffset = parseInt(respObj.offset);
+
+	    localStorage.setItem('offset', curOffset);
+	  }
+	},"call.php?action=CurrentOffset");
+	
+	return parseInt(localStorage.getItem('offset') || 0);
+}
+
+function clockOffsetHourPlus() {
+	loadJSON( function (err, resp) {
+	  if(!err) {
+	    var respObj = JSON.parse(resp);
+	    var curOffset = parseInt(respObj.offset);
+	    
+	    localStorage.setItem('offset', curOffset);
+	  }
+	},"call.php?action=HourPlus");
+
+
+}
+
+function clockOffsetHourMinus() {
+	loadJSON( function (err, resp) {
+	  if(!err) {
+	    var respObj = JSON.parse(resp);
+	    var curOffset = parseInt(respObj.offset);
+
+	    localStorage.setItem('offset', curOffset);
+	  }
+	},"call.php?action=HourMinus");
+	
+}
+
+</script>
+</body>
+</html>
